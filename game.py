@@ -44,6 +44,15 @@ class Agent:
         f = d.normalize() * 0.1
         self.apply_force(f.x, f.y)
 
+    def separation(self, agents):
+
+        d = pygame.Vector2(0, 0)
+        for agent in agents:
+            d += self.position - agent.position
+        separation_force = d * 0.1
+
+        self.apply_force(separation_force.x, separation_force.y)
+
     def draw(self):
         pygame.draw.circle(screen, "red", self.position, 10)
 
@@ -68,6 +77,7 @@ while running:
     for agent in agents:
         #agent.seek(400, 400)
         agent.coherence(agents)
+        agent.separation(agents)
         agent.update()
         agent.draw()
 
