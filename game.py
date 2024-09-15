@@ -30,6 +30,20 @@ class Agent:
         seeking_force = d
         self.apply_force(seeking_force.x, seeking_force.y)
 
+    def coherence(self, agents):
+        
+        center_of_mass = pygame.Vector2(0, 0)
+
+        for agent in agents:
+            if agent != self:
+                center_of_mass += agent.position
+
+        center_of_mass /= len(agents) - 1
+
+        d = center_of_mass - self.position
+        f = d.normalize() * 0.1
+        self.apply_force(f.x, f.y)
+
     def draw(self):
         pygame.draw.circle(screen, "red", self.position, 10)
 
@@ -52,7 +66,8 @@ while running:
     screen.fill("grey")
 
     for agent in agents:
-        agent.seek(400, 400)
+        #agent.seek(400, 400)
+        agent.coherence(agents)
         agent.update()
         agent.draw()
 
